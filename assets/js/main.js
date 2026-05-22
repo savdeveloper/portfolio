@@ -1,30 +1,20 @@
-/* =========================================================
-   sav.dev — portfolio scripts
-   - Navbar (scroll shadow + menu mobile)
-   - Terminal: efeito de digitação
-   - Scroll reveal via IntersectionObserver
-   - Formulário de contato (Turnstile + Edge Function + rate limit)
-   ========================================================= */
+// sav.dev — scripts do portfolio
+// faz: navbar, terminal animado, scroll reveal, form de contato
 
 (() => {
   "use strict";
 
-  /* ---------- Endpoint da Edge Function ---------- */
-  // Esta função:
-  //  1) valida o token do Cloudflare Turnstile
-  //  2) chama a RPC submit_contact_message no Supabase (rate limit + anti-spam)
-  //  3) o trigger no banco dispara o e-mail via Resend
-  const SUBMIT_ENDPOINT =
-    "https://sbgkimmcqnxepbwyrtlg.supabase.co/functions/v1/submit-message";
+  // endpoint que valida turnstile + grava no supabase + dispara email
+  const SUBMIT_URL = "https://sbgkimmcqnxepbwyrtlg.supabase.co/functions/v1/submit-message";
 
-  /* ---------- Navbar ---------- */
+  // --- navbar ---
   const nav = document.getElementById("nav");
   const menuBtn = document.getElementById("menu-btn");
   const navLinks = document.getElementById("nav-links");
 
-  const onScroll = () => {
+  function onScroll() {
     nav.classList.toggle("scrolled", window.scrollY > 10);
-  };
+  }
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
@@ -36,7 +26,7 @@
     a.addEventListener("click", () => navLinks.classList.remove("open"))
   );
 
-  /* ---------- Terminal: efeito de digitação ---------- */
+  // --- terminal: efeito de digitacao ---
   const t1 = document.getElementById("t1");
   const l2 = document.getElementById("l2");
   const l3 = document.getElementById("l3");
@@ -67,6 +57,7 @@
   }
 
   if (reduced) {
+    // quem nao quer animacao ve tudo de uma vez
     t1.textContent = cmd;
     t1.classList.remove("typing");
     l2.style.display = "flex";
@@ -80,7 +71,7 @@
     setTimeout(tick, 450);
   }
 
-  /* ---------- Scroll reveal ---------- */
+  // --- scroll reveal ---
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((e) => {
@@ -94,43 +85,44 @@
   );
   document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 
-  /* ---------- Formulário de contato ---------- */
+  // --- form de contato ---
   const form = document.getElementById("contact-form");
   const status = document.getElementById("form-status");
   const submitBtn = form.querySelector('button[type="submit"]');
   const submitOriginal = submitBtn.innerHTML;
   const formLoadedAt = Date.now();
 
-  const setStatus = (msg, color) => {
+  function setStatus(msg, color) {
     status.textContent = msg;
     status.style.color = color;
-  };
-  const isValidEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  }
+  function isValidEmail(e) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  }
 
-  // Mensagens humanas para cada código de erro vindo do servidor
-  const errorMessages = {
-    missing_captcha:      "⚠ Aguarde o desafio de segurança terminar antes de enviar.",
-    captcha_failed:       "⚠ Verificação de segurança falhou. Tente novamente.",
-    too_fast:             "⚠ Calma! Aguarde um instante antes de enviar.",
-    invalid_name:         "⚠ Nome inválido.",
-    invalid_email:        "⚠ E-mail inválido.",
-    invalid_email_format: "⚠ E-mail inválido. Confira o formato.",
-    invalid_message:      "⚠ Mensagem inválida (entre 1 e 4000 caracteres).",
-    too_many_links:       "⚠ Mensagens com vários links são bloqueadas por anti-spam.",
-    rate_limit_email:     "⚠ Você já enviou várias mensagens recentemente. Tente novamente em uma hora.",
-    rate_limit_global:    "⚠ Muitas mensagens chegando agora. Tente novamente em alguns minutos.",
-    rpc_failed:           "⚠ Erro do servidor. Tenta novamente em instantes.",
-    server_error:         "⚠ Erro do servidor. Tenta novamente em instantes."
+  // codigos do server -> msg amigavel
+  const errMsg = {
+    missing_captcha:      "⚠ aguarde o desafio de segurança terminar antes de enviar.",
+    captcha_failed:       "⚠ verificação falhou. tente novamente.",
+    too_fast:             "⚠ calma! aguarde um instante.",
+    invalid_name:         "⚠ nome inválido.",
+    invalid_email:        "⚠ e-mail inválido.",
+    invalid_email_format: "⚠ e-mail inválido. confira o formato.",
+    invalid_message:      "⚠ mensagem inválida (1 a 4000 caracteres).",
+    too_many_links:       "⚠ mensagens com varios links sao bloqueadas.",
+    rate_limit_email:     "⚠ voce ja enviou varias mensagens. tente em uma hora.",
+    rate_limit_global:    "⚠ muitas mensagens chegando agora. tente em alguns minutos.",
+    rpc_failed:           "⚠ erro do servidor. tente em instantes.",
+    server_error:         "⚠ erro do servidor. tente em instantes."
   };
 
-  // Reseta o widget do Turnstile (pra usuário tentar de novo após erro)
   function resetTurnstile() {
     try {
       if (window.turnstile) {
         const widget = document.getElementById("turnstile-widget");
         if (widget) window.turnstile.reset(widget);
       }
-    } catch (_) { /* ignora */ }
+    } catch (_) {}
   }
 
   form.addEventListener("submit", async (e) => {
@@ -141,51 +133,48 @@
     const email   = (data.get("email")   || "").toString().trim();
     const message = (data.get("message") || "").toString().trim();
     const honey   = (data.get("website") || "").toString();
-    const turnstileToken = (data.get("cf-turnstile-response") || "").toString();
+    const token   = (data.get("cf-turnstile-response") || "").toString();
 
-    // 1) Honeypot — bot caiu, fingimos sucesso
+    // honeypot preenchido = bot. finge sucesso e segue
     if (honey) {
-      setStatus("✓ Mensagem enviada!", "#8b5cf6");
+      setStatus("✓ mensagem enviada!", "#8b5cf6");
       form.reset();
       resetTurnstile();
       return;
     }
 
-    // 2) Validações UX no cliente
     if (!name || !email || !message) {
-      setStatus("⚠ Preencha todos os campos antes de enviar.", "#fbbf24");
+      setStatus("⚠ preencha todos os campos antes de enviar.", "#fbbf24");
       return;
     }
     if (!isValidEmail(email)) {
-      setStatus("⚠ E-mail inválido. Confira e tente novamente.", "#fbbf24");
+      setStatus("⚠ e-mail inválido. confira e tente novamente.", "#fbbf24");
       return;
     }
     if (message.length > 4000) {
-      setStatus("⚠ A mensagem é muito longa (máx. 4000 caracteres).", "#fbbf24");
+      setStatus("⚠ a mensagem é muito longa (max 4000 caracteres).", "#fbbf24");
+      return;
+    }
+    if (!token) {
+      setStatus("⚠ aguarde a verificação terminar e tente novamente.", "#fbbf24");
       return;
     }
 
-    // 3) Turnstile precisa ter rodado
-    if (!turnstileToken) {
-      setStatus("⚠ Aguarde a verificação de segurança terminar e tente novamente.", "#fbbf24");
-      return;
-    }
-
-    // 4) Loading state
+    // loading
     submitBtn.disabled = true;
     submitBtn.style.opacity = "0.75";
-    submitBtn.innerHTML = "Enviando…";
+    submitBtn.innerHTML = "enviando…";
     setStatus("", "var(--text-dim)");
 
     try {
-      const resp = await fetch(SUBMIT_ENDPOINT, {
+      const resp = await fetch(SUBMIT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
           email,
           message,
-          turnstileToken,
+          turnstileToken: token,
           formFilledMs: Date.now() - formLoadedAt,
           userAgent: navigator.userAgent.slice(0, 300)
         })
@@ -195,20 +184,20 @@
 
       if (resp.ok && result?.ok) {
         setStatus(
-          `✓ Obrigado, ${name}! Sua mensagem foi enviada — te respondo no e-mail ${email} em breve.`,
+          `✓ obrigado, ${name}! te respondo no e-mail ${email} em breve.`,
           "#8b5cf6"
         );
         form.reset();
         resetTurnstile();
       } else {
         const code = result?.error || "server_error";
-        setStatus(errorMessages[code] || "⚠ Não consegui enviar. Tenta novamente.", "#fbbf24");
-        resetTurnstile();  // exige novo desafio
+        setStatus(errMsg[code] || "⚠ nao consegui enviar. tente novamente.", "#fbbf24");
+        resetTurnstile();
       }
     } catch (err) {
       console.error(err);
       setStatus(
-        "⚠ Não consegui enviar agora. Tente novamente em instantes ou me chame pelo Discord/Instagram abaixo.",
+        "⚠ nao consegui enviar agora. tente em instantes ou me chame pelo discord/instagram.",
         "#f87171"
       );
       resetTurnstile();
@@ -219,7 +208,7 @@
     }
   });
 
-  /* ---------- Ano dinâmico no footer ---------- */
+  // ano dinamico no footer
   const year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 })();

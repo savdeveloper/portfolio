@@ -1,19 +1,16 @@
 <!DOCTYPE html>
-<!-- auto-deploy from github · savdeveloper/savdev -->
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#07060b" />
-  <meta name="description" content="sav — Desenvolvedor Web. Portfólio com projetos, skills e contato." />
+  <meta name="description" content="sav — desenvolvedor web. portfolio com projetos e contato." />
 
-  <title>sav.dev — desenvolvedor web</title>
+  <title>sav.dev</title>
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/img/favicon.png" />
   <link rel="apple-touch-icon" href="assets/img/favicon.png" />
 
-  <!-- Fontes: apenas o que é usado (Space Grotesk + JetBrains Mono) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -21,50 +18,32 @@
     rel="stylesheet"
   />
 
-  <!-- Pré-carrega a logo (acima da dobra) -->
   <link rel="preload" as="image" href="assets/img/logo-mark.webp" type="image/webp" />
 
-  <link rel="stylesheet" href="assets/css/styles.css?v=5" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=6" />
 
-  <!-- Cloudflare Turnstile (CAPTCHA invisível) -->
+  <!-- captcha invisivel -->
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
-  <!-- Snippets decorativos (só desktop, via CSS) -->
-  <div class="code-bg" aria-hidden="true">
-    <div class="code-snippet cs-1"><span class="c">// hello world</span>
-<span class="k">const</span> dev = <span class="s">'sav'</span>;</div>
-    <div class="code-snippet cs-2"><span class="k">function</span> <span class="f">build</span>() {
-  <span class="k">return</span> <span class="s">'ideas'</span>;
-}</div>
-    <div class="code-snippet cs-3">&lt;<span class="k">div</span> class=<span class="s">"hero"</span>&gt;
-  &lt;<span class="k">h1</span>&gt;sav&lt;/<span class="k">h1</span>&gt;
-&lt;/<span class="k">div</span>&gt;</div>
-    <div class="code-snippet cs-4">npm <span class="f">run</span> dev
-<span class="c"># ready in 420ms</span></div>
-  </div>
-
-  <!-- =========================================================
-       NAVBAR
-       ========================================================= -->
   <header class="nav" id="nav">
     <div class="nav-inner">
-      <a class="brand" href="#home" aria-label="sav.dev — início">
-        <img src="assets/img/logo-mark.webp" alt="" width="30" height="30" />
+      <a class="brand" href="#home" aria-label="sav.dev">
+        <img src="assets/img/logo-mark.webp" alt="" width="28" height="28" />
         <span class="brand-name">sav<span class="dot">.</span>dev</span>
       </a>
 
-      <nav class="nav-links" id="nav-links" aria-label="Navegação principal">
-        <a class="nav-link" href="#home">Home</a>
-        <a class="nav-link" href="#projects">Projects</a>
-        <a class="nav-link" href="#skills">Skills</a>
-        <a class="nav-link" href="#contact">Contact</a>
+      <nav class="nav-links" id="nav-links" aria-label="Navegacao principal">
+        <a class="nav-link" href="#home">início</a>
+        <a class="nav-link" href="#projects">projetos</a>
+        <a class="nav-link" href="#skills">skills</a>
+        <a class="nav-link" href="#contact">contato</a>
       </nav>
 
       <button class="menu-btn" id="menu-btn" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="6"  x2="21" y2="6"></line>
           <line x1="3" y1="12" x2="21" y2="12"></line>
           <line x1="3" y1="18" x2="21" y2="18"></line>
         </svg>
@@ -73,9 +52,7 @@
   </header>
 
   <main>
-    <!-- =========================================================
-         HERO
-         ========================================================= -->
+
     <section class="hero" id="home">
       <div class="hero-wrap">
         <div class="terminal reveal">
@@ -98,30 +75,28 @@
               <span class="out"><span class="tk-com">// learning · building · shipping</span></span>
             </div>
 
-            <!-- Logo S real, com glow sutil -->
             <div class="hero-logo reveal d1" id="hero-logo" style="display:none;">
-              <img src="assets/img/logo-mark.webp" alt="Logo sav" width="200" height="200" />
+              <img src="assets/img/logo-mark.webp" alt="logo sav" width="160" height="160" />
             </div>
 
             <div class="hero-sub reveal d2" id="hero-sub" style="display:none;">
-              <span class="hero-tag">// desenvolvedor web</span>
+              <span class="hero-tag">// dev web</span>
               <h1 class="hero-title">
-                Construindo a web,<br />
+                construindo a web,<br />
                 <span class="grad">um commit por vez.</span>
               </h1>
               <p class="hero-desc">
-                Front-end focado em HTML, CSS, JavaScript e React.
-                Interfaces limpas, código organizado, atenção aos detalhes.
+                front-end focado em HTML, CSS, JavaScript e React. interfaces limpas, código organizado, atenção aos detalhes.
               </p>
               <div class="hero-actions">
                 <a href="#projects" class="btn btn-primary">
-                  Ver projetos
+                  ver projetos
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
                   </svg>
                 </a>
-                <a href="#contact" class="btn btn-ghost">Vamos conversar</a>
+                <a href="#contact" class="btn btn-ghost">vamos conversar</a>
               </div>
             </div>
           </div>
@@ -129,35 +104,31 @@
       </div>
     </section>
 
-    <!-- =========================================================
-         PROJECTS
-         ========================================================= -->
     <section class="section" id="projects">
-      <h2 class="section-title reveal">Projects<span class="accent">.</span></h2>
-      <p class="section-sub reveal d1">
-        Pequenos projetos que estou usando para evoluir como dev — cada um foi uma lição diferente.
-      </p>
+      <div class="section-head reveal">
+        <h2 class="section-title">projetos<span class="accent">.</span></h2>
+        <p class="section-sub">pequenas coisas que tenho construído pra evoluir.</p>
+      </div>
 
       <div class="projects">
-        <!-- Projeto real: Ophicina da Madeira -->
         <article class="card reveal">
           <a class="card-image-wrap" href="https://ophicinadamadeira.com" target="_blank" rel="noopener" aria-label="Abrir Ophicina da Madeira">
             <picture>
               <source media="(max-width: 640px)" srcset="assets/img/projects/ophicina-sm.webp" />
-              <img src="assets/img/projects/ophicina.webp" alt="Ophicina da Madeira — identidade visual" width="900" height="508" loading="lazy" decoding="async" />
+              <img src="assets/img/projects/ophicina.webp" alt="Ophicina da Madeira" width="900" height="508" loading="lazy" decoding="async" />
             </picture>
           </a>
           <h3 class="card-title">Ophicina da Madeira</h3>
           <p class="card-desc">
-            Site institucional de loja de móveis de madeira maciça. Identidade visual sóbria, navegação clara e foco em conversão.
+            site institucional de uma loja de moveis de madeira maciça. identidade sobria, navegação clara, foco em conversão.
           </p>
           <div class="tags">
             <span class="tag">HTML</span>
             <span class="tag">CSS</span>
-            <span class="tag">JavaScript</span>
+            <span class="tag">JS</span>
           </div>
           <a class="card-link" href="https://ophicinadamadeira.com" target="_blank" rel="noopener">
-            Ver ao vivo
+            ver ao vivo
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M7 17L17 7"></path>
               <polyline points="7 7 17 7 17 17"></polyline>
@@ -165,134 +136,60 @@
           </a>
         </article>
 
-        <!-- Placeholder: próximos projetos -->
         <article class="card card-soon reveal d1">
           <span class="card-soon-badge">// em breve</span>
-          <h3 class="card-title">Novo projeto</h3>
-          <p class="card-desc">Já em construção. Volte em breve.</p>
+          <h3 class="card-title">novo projeto</h3>
+          <p class="card-desc">ja em construção. volte em breve.</p>
         </article>
 
         <article class="card card-soon reveal d2">
           <span class="card-soon-badge">// em breve</span>
-          <h3 class="card-title">Novo projeto</h3>
-          <p class="card-desc">Já em construção. Volte em breve.</p>
+          <h3 class="card-title">novo projeto</h3>
+          <p class="card-desc">ja em construção. volte em breve.</p>
         </article>
       </div>
     </section>
 
-    <!-- =========================================================
-         SKILLS
-         ========================================================= -->
     <section class="section" id="skills">
-      <h2 class="section-title reveal">Skills<span class="accent">.</span></h2>
-      <p class="section-sub reveal d1">Stack que estou aprendendo e usando no dia a dia.</p>
+      <div class="section-head reveal">
+        <h2 class="section-title">skills<span class="accent">.</span></h2>
+        <p class="section-sub">stack que uso e estou aprendendo.</p>
+      </div>
 
-      <div class="skills">
-        <div class="skill reveal">
-          <div class="skill-icon">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M4 3h16l-1.5 17L12 22 5.5 20 4 3z"/><path d="M8 8h8l-.5 4H9"/><path d="M9.2 14l.3 3 2.5.7 2.5-.7.3-3"/>
-            </svg>
-          </div>
-          <span class="skill-name">HTML</span>
-        </div>
-        <div class="skill reveal d1">
-          <div class="skill-icon">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M4 3h16l-1.5 17L12 22 5.5 20 4 3z"/><path d="M8 8h8M8.5 12H15l-.4 4-2.6.9-2.6-.9-.2-2"/>
-            </svg>
-          </div>
-          <span class="skill-name">CSS</span>
-        </div>
-        <div class="skill reveal d2">
-          <div class="skill-icon">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="3" y="3" width="18" height="18" rx="2"/>
-              <path d="M9 10v6a2 2 0 0 1-2 2"/>
-              <path d="M13 17c.6.7 1.5 1 2.4 1 1.3 0 2.2-.6 2.2-1.6 0-1.9-4-1.4-4-3.3 0-.9.8-1.6 2-1.6.9 0 1.6.3 2 .9"/>
-            </svg>
-          </div>
-          <span class="skill-name">JavaScript</span>
-        </div>
-        <div class="skill reveal d3">
-          <div class="skill-icon">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="2"/>
-              <ellipse cx="12" cy="12" rx="10" ry="4"/>
-              <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/>
-              <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/>
-            </svg>
-          </div>
-          <span class="skill-name">React</span>
-        </div>
-        <div class="skill reveal">
-          <div class="skill-icon">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M3 13c1.5-4 4-6 7.5-6 5 0 5.5 4 8.5 4.5 2 .3 3-.5 4-2-1.5 4-4 6-7.5 6-5 0-5.5-4-8.5-4.5-2-.3-3 .5-4 2z"/>
-            </svg>
-          </div>
-          <span class="skill-name">Tailwind</span>
-        </div>
-        <div class="skill reveal d1">
-          <div class="skill-icon">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 2 3 7v10l9 5 9-5V7l-9-5z"/>
-              <path d="M9 11v4a2 2 0 0 0 4 0"/>
-              <path d="M14 11h3a1.5 1.5 0 0 1 0 3h-2a1.5 1.5 0 0 0 0 3h3"/>
-            </svg>
-          </div>
-          <span class="skill-name">Node.js</span>
-        </div>
-        <div class="skill reveal d2">
-          <div class="skill-icon">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="6" cy="6" r="2.2"/>
-              <circle cx="18" cy="6" r="2.2"/>
-              <circle cx="12" cy="18" r="2.2"/>
-              <path d="M6 8v3a3 3 0 0 0 3 3h3"/>
-              <path d="M18 8v6"/>
-            </svg>
-          </div>
-          <span class="skill-name">Git</span>
-        </div>
-        <div class="skill reveal d3">
-          <div class="skill-icon">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M9 19c-4 1.5-4-2-6-2.5"/>
-              <path d="M15 22v-3.9c.1-1-.2-2-.9-2.8 2.6-.3 5.4-1.3 5.4-5.9.1-1.2-.4-2.3-1.2-3.2.4-1.1.3-2.3-.2-3.3 0 0-1-.3-3.4 1.3-2-.6-4.1-.6-6 0C6.3 2.6 5.3 3 5.3 3c-.5 1-.6 2.2-.2 3.3-.8.8-1.3 2-1.2 3.2 0 4.6 2.8 5.6 5.4 5.9-.7.7-1 1.7-.9 2.8V22"/>
-            </svg>
-          </div>
-          <span class="skill-name">GitHub</span>
-        </div>
+      <div class="skills-inline reveal d1">
+        <span class="pill"><span class="dot-mini"></span>HTML</span>
+        <span class="pill"><span class="dot-mini"></span>CSS</span>
+        <span class="pill"><span class="dot-mini"></span>JavaScript</span>
+        <span class="pill"><span class="dot-mini"></span>React</span>
+        <span class="pill"><span class="dot-mini"></span>Tailwind</span>
+        <span class="pill"><span class="dot-mini"></span>Node.js</span>
+        <span class="pill"><span class="dot-mini"></span>Git</span>
+        <span class="pill"><span class="dot-mini"></span>GitHub</span>
       </div>
     </section>
 
-    <!-- =========================================================
-         CONTACT
-         ========================================================= -->
     <section class="section" id="contact">
-      <h2 class="section-title reveal">Contact<span class="accent">.</span></h2>
-      <p class="section-sub reveal d1">
-        Tem uma ideia, dúvida ou só quer trocar uma figurinha sobre código? Bora.
-      </p>
+      <div class="section-head reveal">
+        <h2 class="section-title">contato<span class="accent">.</span></h2>
+        <p class="section-sub">tem uma ideia, duvida ou só quer trocar uma figurinha sobre código? bora.</p>
+      </div>
 
       <div class="contact-grid">
         <form class="box reveal" id="contact-form" novalidate>
-          <h3>Mande uma mensagem</h3>
-          <p class="lead">Te respondo o mais rápido possível.</p>
+          <h3>manda uma mensagem</h3>
+          <p class="lead">te respondo o mais rápido possivel.</p>
 
-          <input class="field" type="text" name="name" placeholder="Seu nome" autocomplete="name" required />
-          <input class="field" type="email" name="email" placeholder="Seu e-mail" autocomplete="email" inputmode="email" required />
-          <textarea class="field" name="message" placeholder="Sua mensagem…" required></textarea>
+          <input class="field" type="text"  name="name"  placeholder="seu nome"   autocomplete="name"  required />
+          <input class="field" type="email" name="email" placeholder="seu e-mail" autocomplete="email" inputmode="email" required />
+          <textarea class="field" name="message" placeholder="sua mensagem…" required></textarea>
 
-          <!-- HONEYPOT: humanos não veem (CSS o esconde); bots costumam preencher tudo -->
+          <!-- honeypot anti-bot (humano nao ve) -->
           <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">
-            <label>Não preencha este campo
+            <label>nao preencha
               <input type="text" name="website" tabindex="-1" autocomplete="off" />
             </label>
           </div>
 
-          <!-- Cloudflare Turnstile widget (anti-bot invisível, theme dark) -->
           <div
             id="turnstile-widget"
             class="cf-turnstile"
@@ -303,19 +200,19 @@
           ></div>
 
           <button type="submit" class="btn btn-primary" style="width:100%;">
-            Enviar mensagem
+            enviar
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <line x1="22" y1="2" x2="11" y2="13"></line>
               <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
             </svg>
           </button>
 
-          <p id="form-status" style="margin: 14px 0 0; font-size: 13px; color: var(--text-dim);" aria-live="polite"></p>
+          <p id="form-status" style="margin: 12px 0 0; font-size: 13px; color: var(--text-dim);" aria-live="polite"></p>
         </form>
 
         <div class="box reveal d1">
-          <h3>Ou me encontre por aqui</h3>
-          <p class="lead">Estou mais ativo no Discord e Instagram.</p>
+          <h3>ou me encontre por aqui</h3>
+          <p class="lead">tô mais ativo no discord e instagram.</p>
 
           <ul class="socials">
             <li>
@@ -327,7 +224,7 @@
                   </svg>
                 </span>
                 <span class="social-meta">
-                  <span class="lbl">E-mail</span>
+                  <span class="lbl">e-mail</span>
                   <span class="val">sav@iamsav.dev</span>
                 </span>
               </a>
@@ -345,7 +242,7 @@
                   </svg>
                 </span>
                 <span class="social-meta">
-                  <span class="lbl">Discord</span>
+                  <span class="lbl">discord</span>
                   <span class="val">@vulgosav</span>
                 </span>
               </a>
@@ -360,7 +257,7 @@
                   </svg>
                 </span>
                 <span class="social-meta">
-                  <span class="lbl">Instagram</span>
+                  <span class="lbl">instagram</span>
                   <span class="val">@iamsav.dev</span>
                 </span>
               </a>
@@ -373,7 +270,7 @@
                   </svg>
                 </span>
                 <span class="social-meta">
-                  <span class="lbl">X (Twitter)</span>
+                  <span class="lbl">x (twitter)</span>
                   <span class="val">@savdeveloper</span>
                 </span>
               </a>
@@ -386,9 +283,9 @@
 
   <footer>
     <span class="made">// made with <span class="heart">♥</span> by <span class="name">sav</span></span>
-    <div style="margin-top:6px; opacity:.6;">© <span id="year"></span> — todos os direitos reservados.</div>
+    <div style="margin-top:4px; opacity:.6;">© <span id="year"></span> — todos os direitos reservados.</div>
   </footer>
 
-  <script src="assets/js/main.js?v=5" defer></script>
+  <script src="assets/js/main.js?v=6" defer></script>
 </body>
 </html>
