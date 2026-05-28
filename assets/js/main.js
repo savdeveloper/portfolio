@@ -46,25 +46,23 @@
     });
   }
 
-  // --- terminal: efeito de digitacao + cascata ---
+  // --- terminal: efeito de digitacao ---
   const t1 = $("t1");
-  const blockIds = ["l-who", "l-cat-cmd", "l-cat-1", "l-cat-2", "l-ls-cmd", "l-ls-out", "hero-logo", "hero-sub"];
-  const blocks = blockIds.map((id) => $(id));
+  const l2 = $("l2");
+  const l3 = $("l3");
+  const logoEl = $("hero-logo");
+  const subEl = $("hero-sub");
 
-  if (t1 && blocks.every(Boolean)) {
-    const [lWho, lCatCmd, lCat1, lCat2, lLsCmd, lLsOut, logoEl, subEl] = blocks;
-    const cmd = "whoami";
+  if (t1 && l2 && l3 && logoEl && subEl) {
+    const cmd = "npm run sav";
     let i = 0;
-
-    const reveal = (el) => {
-      el.classList.remove("js-only");
-      if (el === logoEl || el === subEl) el.classList.add("visible");
-    };
 
     const showAll = () => {
       t1.textContent = cmd;
       t1.classList.remove("typing");
-      blocks.forEach(reveal);
+      [l2, l3, logoEl, subEl].forEach((el) => el.classList.remove("js-only"));
+      logoEl.classList.add("visible");
+      subEl.classList.add("visible");
     };
 
     const tick = () => {
@@ -74,20 +72,19 @@
       }
       if (i < cmd.length) {
         t1.textContent += cmd.charAt(i++);
-        setTimeout(tick, 90 + Math.random() * 60);
+        setTimeout(tick, 70 + Math.random() * 60);
       } else {
         t1.classList.remove("typing");
-        const schedule = [
-          [lWho,    150],
-          [lCatCmd, 450],
-          [lCat1,   650],
-          [lCat2,   820],
-          [lLsCmd,  1120],
-          [lLsOut,  1300],
-          [logoEl,  1600],
-          [subEl,   1900]
-        ];
-        schedule.forEach(([el, delay]) => setTimeout(() => reveal(el), delay));
+        setTimeout(() => l2.classList.remove("js-only"), 220);
+        setTimeout(() => l3.classList.remove("js-only"), 640);
+        setTimeout(() => {
+          logoEl.classList.remove("js-only");
+          logoEl.classList.add("visible");
+        }, 980);
+        setTimeout(() => {
+          subEl.classList.remove("js-only");
+          subEl.classList.add("visible");
+        }, 1300);
       }
     };
 
