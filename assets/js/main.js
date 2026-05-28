@@ -1,214 +1,310 @@
 // sav.dev — scripts do portfolio
-// faz: navbar, terminal animado, scroll reveal, form de contato
+// faz: navbar, terminal animado, scroll reveal, lazy turnstile, form de contato
 
 (() => {
   "use strict";
 
+  const $ = (id) => document.getElementById(id);
+
   // endpoint que valida turnstile + grava no supabase + dispara email
   const SUBMIT_URL = "https://sbgkimmcqnxepbwyrtlg.supabase.co/functions/v1/submit-message";
 
-  // --- navbar ---
-  const nav = document.getElementById("nav");
-  const menuBtn = document.getElementById("menu-btn");
-  const navLinks = document.getElementById("nav-links");
-
-  function onScroll() {
-    nav.classList.toggle("scrolled", window.scrollY > 10);
-  }
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-
-  menuBtn.addEventListener("click", () => {
-    const open = navLinks.classList.toggle("open");
-    menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
-  });
-  navLinks.querySelectorAll("a").forEach((a) =>
-    a.addEventListener("click", () => navLinks.classList.remove("open"))
-  );
-
-  // --- terminal: efeito de digitacao ---
-  const t1 = document.getElementById("t1");
-  const l2 = document.getElementById("l2");
-  const l3 = document.getElementById("l3");
-  const logoEl = document.getElementById("hero-logo");
-  const subEl = document.getElementById("hero-sub");
-
-  const cmd = "npm run sav";
-  let i = 0;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  function tick() {
-    if (i < cmd.length) {
-      t1.textContent += cmd.charAt(i++);
-      setTimeout(tick, 70 + Math.random() * 60);
-    } else {
+  // --- navbar ---
+  const nav = $("nav");
+  const menuBtn = $("menu-btn");
+  const navLinks = $("nav-links");
+
+  if (nav) {
+    const onScroll = () => nav.classList.toggle("scrolled", window.scrollY > 10);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
+  if (menuBtn && navLinks) {
+    const closeMenu = () => {
+      navLinks.classList.remove("open");
+      menuBtn.setAttribute("aria-expanded", "false");
+    };
+
+    menuBtn.addEventListener("click", () => {
+      const open = navLinks.classList.toggle("open");
+      menuBtn.setAttribute("aria-expanded", String(open));
+    });
+
+    navLinks.querySelectorAll("a").forEach((a) =>
+      a.addEventListener("click", closeMenu)
+    );
+
+    // a11y: ESC fecha o menu mobile
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && navLinks.classList.contains("open")) {
+        closeMenu();
+        menuBtn.focus();
+      }
+    });
+  }
+
+  // --- terminal: efeito de digitacao + cascata ---
+  const t1 = $("t1");
+  const blockIds = ["l-who", "l-cat-cmd", "l-cat-1", "l-cat-2", "l-ls-cmd", "l-ls-out", "hero-logo", "hero-sub"];
+  const blocks = blockIds.map((id) => $(id));
+
+  if (t1 && blocks.every(Boolean)) {
+    const [lWho, lCatCmd, lCat1, lCat2, lLsCmd, lLsOut, logoEl, subEl] = blocks;
+    const cmd = "whoami";
+    let i = 0;
+
+    const reveal = (el) => {
+      el.classList.remove("js-only");
+      if (el === logoEl || el === subEl) el.classList.add("visible");
+    };
+
+    const showAll = () => {
+      t1.textContent = cmd;
       t1.classList.remove("typing");
-      setTimeout(() => (l2.style.display = "flex"), 220);
-      setTimeout(() => (l3.style.display = "flex"), 640);
-      setTimeout(() => {
-        logoEl.style.display = "flex";
-        logoEl.classList.add("visible");
-      }, 980);
-      setTimeout(() => {
-        subEl.style.display = "block";
-        subEl.classList.add("visible");
-      }, 1300);
+      blocks.forEach(reveal);
+    };
+
+    const tick = () => {
+      if (document.hidden) {
+        showAll();
+        return;
+      }
+      if (i < cmd.length) {
+        t1.textContent += cmd.charAt(i++);
+        setTimeout(tick, 90 + Math.random() * 60);
+      } else {
+        t1.classList.remove("typing");
+        const schedule = [
+          [lWho,    150],
+          [lCatCmd, 450],
+          [lCat1,   650],
+          [lCat2,   820],
+          [lLsCmd,  1120],
+          [lLsOut,  1300],
+          [logoEl,  1600],
+          [subEl,   1900]
+        ];
+        schedule.forEach(([el, delay]) => setTimeout(() => reveal(el), delay));
+      }
+    };
+
+    if (reduced) {
+      showAll();
+    } else {
+      t1.classList.add("typing");
+      setTimeout(tick, 450);
     }
   }
 
-  if (reduced) {
-    // quem nao quer animacao ve tudo de uma vez
-    t1.textContent = cmd;
-    t1.classList.remove("typing");
-    l2.style.display = "flex";
-    l3.style.display = "flex";
-    logoEl.style.display = "flex";
-    logoEl.classList.add("visible");
-    subEl.style.display = "block";
-    subEl.classList.add("visible");
-  } else {
-    t1.classList.add("typing");
-    setTimeout(tick, 450);
+  // --- spotlight no hero (segue o mouse) ---
+  const hero = document.querySelector(".hero");
+  if (hero && matchMedia("(hover: hover)").matches && !reduced) {
+    let raf = null;
+    let px = 0, py = 0;
+    const apply = () => {
+      raf = null;
+      hero.style.setProperty("--mx", px + "px");
+      hero.style.setProperty("--my", py + "px");
+    };
+    hero.addEventListener("pointermove", (e) => {
+      const r = hero.getBoundingClientRect();
+      px = e.clientX - r.left;
+      py = e.clientY - r.top;
+      if (raf === null) raf = requestAnimationFrame(apply);
+    });
   }
 
   // --- scroll reveal ---
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add("visible");
-          io.unobserve(e.target);
-        }
-      });
-    },
-    { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
-  );
-  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
-
-  // --- form de contato ---
-  const form = document.getElementById("contact-form");
-  const status = document.getElementById("form-status");
-  const submitBtn = form.querySelector('button[type="submit"]');
-  const submitOriginal = submitBtn.innerHTML;
-  const formLoadedAt = Date.now();
-
-  function setStatus(msg, color) {
-    status.textContent = msg;
-    status.style.color = color;
-  }
-  function isValidEmail(e) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+  } else {
+    document.querySelectorAll(".reveal").forEach((el) => el.classList.add("visible"));
   }
 
-  // codigos do server -> msg amigavel
-  const errMsg = {
-    missing_captcha:      "⚠ aguarde o desafio de segurança terminar antes de enviar.",
-    captcha_failed:       "⚠ verificação falhou. tente novamente.",
-    too_fast:             "⚠ calma! aguarde um instante.",
-    invalid_name:         "⚠ nome inválido.",
-    invalid_email:        "⚠ e-mail inválido.",
-    invalid_email_format: "⚠ e-mail inválido. confira o formato.",
-    invalid_message:      "⚠ mensagem inválida (1 a 4000 caracteres).",
-    too_many_links:       "⚠ mensagens com varios links sao bloqueadas.",
-    rate_limit_email:     "⚠ voce ja enviou varias mensagens. tente em uma hora.",
-    rate_limit_global:    "⚠ muitas mensagens chegando agora. tente em alguns minutos.",
-    rpc_failed:           "⚠ erro do servidor. tente em instantes.",
-    server_error:         "⚠ erro do servidor. tente em instantes."
+  // --- lazy load do cloudflare turnstile ---
+  // so carrega o widget quando o usuario chega perto da section #contact
+  const contactSection = $("contact");
+  let turnstileLoaded = false;
+  const loadTurnstile = () => {
+    if (turnstileLoaded) return;
+    turnstileLoaded = true;
+    const s = document.createElement("script");
+    s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    s.async = true;
+    s.defer = true;
+    document.head.appendChild(s);
   };
 
-  function resetTurnstile() {
-    try {
-      if (window.turnstile) {
-        const widget = document.getElementById("turnstile-widget");
-        if (widget) window.turnstile.reset(widget);
-      }
-    } catch (_) {}
+  if (contactSection && "IntersectionObserver" in window) {
+    const tsObs = new IntersectionObserver(
+      (entries, obs) => {
+        if (entries[0].isIntersecting) {
+          loadTurnstile();
+          obs.disconnect();
+        }
+      },
+      { rootMargin: "400px" }
+    );
+    tsObs.observe(contactSection);
+  } else {
+    // fallback: carrega no load
+    loadTurnstile();
   }
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  // --- form de contato ---
+  const form = $("contact-form");
 
-    const data = new FormData(form);
-    const name    = (data.get("name")    || "").toString().trim();
-    const email   = (data.get("email")   || "").toString().trim();
-    const message = (data.get("message") || "").toString().trim();
-    const honey   = (data.get("website") || "").toString();
-    const token   = (data.get("cf-turnstile-response") || "").toString();
+  if (form) {
+    const status = $("form-status");
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const submitLabel = submitBtn?.querySelector(".btn-label");
+    const originalLabel = submitLabel ? submitLabel.textContent : "enviar";
+    const formLoadedAt = Date.now();
 
-    // honeypot preenchido = bot. finge sucesso e segue
-    if (honey) {
-      setStatus("✓ mensagem enviada!", "#8b5cf6");
-      form.reset();
-      resetTurnstile();
-      return;
-    }
+    const setStatus = (msg, color) => {
+      if (!status) return;
+      status.textContent = msg;
+      status.style.color = color;
+    };
 
-    if (!name || !email || !message) {
-      setStatus("⚠ preencha todos os campos antes de enviar.", "#fbbf24");
-      return;
-    }
-    if (!isValidEmail(email)) {
-      setStatus("⚠ e-mail inválido. confira e tente novamente.", "#fbbf24");
-      return;
-    }
-    if (message.length > 4000) {
-      setStatus("⚠ a mensagem é muito longa (max 4000 caracteres).", "#fbbf24");
-      return;
-    }
-    if (!token) {
-      setStatus("⚠ aguarde a verificação terminar e tente novamente.", "#fbbf24");
-      return;
-    }
+    const isValidEmail = (e) =>
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 
-    // loading
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = "0.75";
-    submitBtn.innerHTML = "enviando…";
-    setStatus("", "var(--text-dim)");
+    // se o user focar/touchar o form antes do IntersectionObserver disparar, carrega ja
+    const eagerLoad = () => {
+      loadTurnstile();
+      form.removeEventListener("focusin", eagerLoad);
+      form.removeEventListener("pointerdown", eagerLoad);
+    };
+    form.addEventListener("focusin", eagerLoad);
+    form.addEventListener("pointerdown", eagerLoad);
 
-    try {
-      const resp = await fetch(SUBMIT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          email,
-          message,
-          turnstileToken: token,
-          formFilledMs: Date.now() - formLoadedAt,
-          userAgent: navigator.userAgent.slice(0, 300)
-        })
-      });
+    // codigos do server -> msg amigavel
+    const errMsg = {
+      missing_captcha:      "⚠ aguarde o desafio de segurança terminar antes de enviar.",
+      captcha_failed:       "⚠ verificação falhou. tente novamente.",
+      too_fast:             "⚠ calma! aguarde um instante.",
+      invalid_name:         "⚠ nome inválido.",
+      invalid_email:        "⚠ e-mail inválido.",
+      invalid_email_format: "⚠ e-mail inválido. confira o formato.",
+      invalid_message:      "⚠ mensagem inválida (1 a 4000 caracteres).",
+      too_many_links:       "⚠ mensagens com varios links sao bloqueadas.",
+      rate_limit_email:     "⚠ voce ja enviou varias mensagens. tente em uma hora.",
+      rate_limit_global:    "⚠ muitas mensagens chegando agora. tente em alguns minutos.",
+      rpc_failed:           "⚠ erro do servidor. tente em instantes.",
+      server_error:         "⚠ erro do servidor. tente em instantes."
+    };
 
-      const result = await resp.json().catch(() => ({ ok: false, error: "server_error" }));
+    const resetTurnstile = () => {
+      try {
+        if (window.turnstile) {
+          const widget = $("turnstile-widget");
+          if (widget) window.turnstile.reset(widget);
+        }
+      } catch (_) { /* noop */ }
+    };
 
-      if (resp.ok && result?.ok) {
-        setStatus(
-          `✓ obrigado, ${name}! te respondo no e-mail ${email} em breve.`,
-          "#8b5cf6"
-        );
+    const setLoading = (loading) => {
+      if (!submitBtn) return;
+      submitBtn.disabled = loading;
+      submitBtn.classList.toggle("is-loading", loading);
+      if (submitLabel) submitLabel.textContent = loading ? "enviando…" : originalLabel;
+    };
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = new FormData(form);
+      const name    = (data.get("name")    || "").toString().trim();
+      const email   = (data.get("email")   || "").toString().trim();
+      const message = (data.get("message") || "").toString().trim();
+      const honey   = (data.get("website") || "").toString();
+      const token   = (data.get("cf-turnstile-response") || "").toString();
+
+      // honeypot preenchido = bot. finge sucesso e segue
+      if (honey) {
+        setStatus("✓ mensagem enviada!", "#8b5cf6");
         form.reset();
         resetTurnstile();
-      } else {
-        const code = result?.error || "server_error";
-        setStatus(errMsg[code] || "⚠ nao consegui enviar. tente novamente.", "#fbbf24");
-        resetTurnstile();
+        return;
       }
-    } catch (err) {
-      console.error(err);
-      setStatus(
-        "⚠ nao consegui enviar agora. tente em instantes ou me chame pelo discord/instagram.",
-        "#f87171"
-      );
-      resetTurnstile();
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.style.opacity = "1";
-      submitBtn.innerHTML = submitOriginal;
-    }
-  });
+
+      if (!name || !email || !message) {
+        setStatus("⚠ preencha todos os campos antes de enviar.", "#fbbf24");
+        return;
+      }
+      if (!isValidEmail(email)) {
+        setStatus("⚠ e-mail inválido. confira e tente novamente.", "#fbbf24");
+        return;
+      }
+      if (message.length > 4000) {
+        setStatus("⚠ a mensagem é muito longa (max 4000 caracteres).", "#fbbf24");
+        return;
+      }
+      if (!token) {
+        setStatus("⚠ aguarde a verificação terminar e tente novamente.", "#fbbf24");
+        return;
+      }
+
+      setLoading(true);
+      setStatus("", "var(--text-dim)");
+
+      try {
+        const resp = await fetch(SUBMIT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            email,
+            message,
+            turnstileToken: token,
+            formFilledMs: Date.now() - formLoadedAt,
+            userAgent: navigator.userAgent.slice(0, 300)
+          })
+        });
+
+        const result = await resp.json().catch(() => ({ ok: false, error: "server_error" }));
+
+        if (resp.ok && result?.ok) {
+          setStatus(
+            `✓ obrigado, ${name}! te respondo no e-mail ${email} em breve.`,
+            "#8b5cf6"
+          );
+          form.reset();
+          resetTurnstile();
+        } else {
+          const code = result?.error || "server_error";
+          setStatus(errMsg[code] || "⚠ nao consegui enviar. tente novamente.", "#fbbf24");
+          resetTurnstile();
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus(
+          "⚠ nao consegui enviar agora. tente em instantes ou me chame pelo discord/instagram.",
+          "#f87171"
+        );
+        resetTurnstile();
+      } finally {
+        setLoading(false);
+      }
+    });
+  }
 
   // ano dinamico no footer
-  const year = document.getElementById("year");
+  const year = $("year");
   if (year) year.textContent = new Date().getFullYear();
 })();
